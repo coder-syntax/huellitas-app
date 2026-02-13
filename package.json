@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:pages": "cross-env NEXT_PUBLIC_BASE_PATH=/${npm_package_name} NEXT_PUBLIC_ASSET_PREFIX=/${npm_package_name}/ next build",
+    "deploy:pages": "npm run build:pages && gh-pages -d out",
     "start": "next start",
     "lint": "eslint"
   },
@@ -19,8 +21,10 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "gh-pages": "^6.3.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
