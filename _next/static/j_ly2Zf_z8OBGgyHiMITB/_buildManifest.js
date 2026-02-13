@@ -3,8 +3,8 @@ self.__BUILD_MANIFEST = {
     "afterFiles": [],
     "beforeFiles": [
       {
-        "source": "/huellitas//_next/:path+",
-        "destination": "/huellitas/_next/:path+"
+        "source": "/huellitas-app//_next/:path+",
+        "destination": "/huellitas-app/_next/:path+"
       }
     ],
     "fallback": []
