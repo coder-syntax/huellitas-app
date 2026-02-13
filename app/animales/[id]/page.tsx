@@ -28,6 +28,12 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+export function generateStaticParams() {
+  return animals.map((animal) => ({ id: String(animal.id) }));
+}
+
+export const dynamicParams = false;
+
 export default async function AnimalDetailPage({ params }: PageProps) {
   const { id } = await params;
   const animal = animals.find((a) => a.id === parseInt(id));
