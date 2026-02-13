@@ -1,4 +1,5 @@
 import AnimalCard from "@/components/AnimalCard";
+import Link from "next/link";
 
 const animals = [
   {
@@ -167,12 +168,12 @@ export default function AnimalsPage() {
           <p className="text-lg mb-6">
             Cada semana rescatamos nuevos animales. Contáctanos para más información.
           </p>
-          <a
+          <Link
             href="/contacto"
             className="inline-block bg-white text-amber-600 px-8 py-3 rounded-lg font-semibold hover:bg-amber-50 transition-colors"
           >
             Contactar
-          </a>
+          </Link>
         </div>
       </div>
     </div>

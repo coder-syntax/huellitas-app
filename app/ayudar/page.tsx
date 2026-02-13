@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { DollarSign, Heart, Package, Calendar } from "lucide-react";
 
@@ -194,12 +195,12 @@ export default function AyudarPage() {
                   Juguetes y elementos de enriquecimiento
                 </li>
               </ul>
-              <a
+              <Link
                 href="/contacto"
                 className="block text-center mt-6 bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-lg font-semibold transition-colors"
               >
                 Coordinar Entrega
-              </a>
+              </Link>
             </div>
 
             {/* Volunteer */}
@@ -211,12 +212,12 @@ export default function AyudarPage() {
                 Únete a nuestro equipo de voluntarios y ayúdanos en eventos,
                 ferias de adopción, redes sociales y más.
               </p>
-              <a
+              <Link
                 href="/contacto"
                 className="inline-block bg-white text-amber-600 px-6 py-3 rounded-lg font-semibold hover:bg-amber-50 transition-colors"
               >
                 Quiero ser Voluntario
-              </a>
+              </Link>
             </div>
           </div>
         </div>

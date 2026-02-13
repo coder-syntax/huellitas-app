@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:pages": "cross-env NEXT_PUBLIC_BASE_PATH=/${npm_package_name} NEXT_PUBLIC_ASSET_PREFIX=/${npm_package_name}/ next build",
+    "build:pages": "cross-env NEXT_PUBLIC_BASE_PATH=/huellitas-app NEXT_PUBLIC_ASSET_PREFIX=/huellitas-app/ next build",
     "deploy:pages": "npm run build:pages && gh-pages -d out",
     "start": "next start",
     "lint": "eslint"
