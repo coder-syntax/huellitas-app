@@ -1,250 +1,151 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Mail, Phone, MapPin, Send, Facebook, Instagram } from "lucide-react";
+import { useFormspree } from '@/hooks/useFormspree';
+import { Button } from '@/components/ui/Button';
+import { Mail, Phone, MapPin, CheckCircle, AlertCircle, Loader2, Instagram, Facebook } from 'lucide-react';
+
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_CONTACTO_FORM_ID';
 
 export default function ContactoPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    subject: "",
-    message: "",
-  });
+  const { submit, status, errorMessage, reset } = useFormspree(FORMSPREE_ENDPOINT);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    alert("¡Mensaje enviado! Nos contactaremos contigo pronto.");
-    console.log(formData);
-  };
+    const data = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
+    await submit(data);
+  }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  if (status === 'success') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="bg-white rounded-2xl shadow-lg p-10 max-w-md w-full text-center">
+          <CheckCircle className="mx-auto mb-4 text-green-500" size={56} />
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">¡Mensaje enviado!</h2>
+          <p className="text-gray-600 mb-6">Gracias por escribirnos. Respondemos en menos de 48 horas hábiles.</p>
+          <Button variant="primary" onClick={reset}>Enviar otro mensaje</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-50 min-h-screen py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-800 mb-4">
-            Contacto
-          </h1>
-          <p className="text-xl text-gray-600">
-            ¿Tienes preguntas? Estamos aquí para ayudarte
-          </p>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Contacto</h1>
+          <p className="text-xl text-gray-600">¿Tenés preguntas? Estamos acá para ayudarte.</p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-5 gap-8">
+          {/* Contact Info */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-5">Información de contacto</h2>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="bg-amber-100 p-2 rounded-lg shrink-0">
+                    <Mail className="text-amber-600" size={20} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">Email</p>
+                    <a href="mailto:info@huellitas.org" className="text-sm text-amber-600 hover:underline">info@huellitas.org</a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="bg-amber-100 p-2 rounded-lg shrink-0">
+                    <Phone className="text-amber-600" size={20} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">WhatsApp</p>
+                    <a href="https://wa.me/5491112345678" target="_blank" rel="noopener noreferrer" className="text-sm text-amber-600 hover:underline">+54 9 11 1234-5678</a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="bg-amber-100 p-2 rounded-lg shrink-0">
+                    <MapPin className="text-amber-600" size={20} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">Ubicación</p>
+                    <p className="text-sm text-gray-600">Buenos Aires, Argentina</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">Redes sociales</h3>
+              <div className="flex gap-3">
+                <a href="https://instagram.com/huellitas" target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">
+                  <Instagram size={16} /> Instagram
+                </a>
+                <a href="https://facebook.com/huellitas" target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                  <Facebook size={16} /> Facebook
+                </a>
+              </div>
+            </div>
+
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6">
+              <h3 className="font-semibold text-amber-800 mb-2">Horario de atención</h3>
+              <p className="text-sm text-amber-700">Lunes a viernes: 9:00 – 18:00 hs</p>
+              <p className="text-sm text-amber-700">Sábados: 10:00 – 14:00 hs</p>
+              <p className="text-sm text-amber-700 mt-2">Respondemos en menos de 48 hs hábiles.</p>
+            </div>
+          </div>
+
           {/* Contact Form */}
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              Envíanos un Mensaje
-            </h2>
+          <div className="lg:col-span-3 bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">Envianos un mensaje</h2>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Nombre Completo *
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  placeholder="Tu nombre"
-                />
+            {status === 'error' && (
+              <div className="flex items-center gap-2 bg-red-50 text-red-700 border border-red-200 rounded-lg px-4 py-3 mb-6">
+                <AlertCircle size={18} />
+                <span className="text-sm">{errorMessage ?? 'Ocurrió un error. Por favor intentá de nuevo.'}</span>
               </div>
+            )}
 
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  placeholder="tu@email.com"
-                />
+            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+                  <input id="name" name="name" type="text" required className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                  <input id="email" name="email" type="email" required className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
+                </div>
               </div>
-
               <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Teléfono
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  placeholder="(011) 1234-5678"
-                />
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Teléfono (opcional)</label>
+                <input id="phone" name="phone" type="tel" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
               </div>
-
               <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Asunto *
-                </label>
-                <select
-                  name="subject"
-                  required
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                >
-                  <option value="">Selecciona un asunto</option>
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">Asunto *</label>
+                <select id="subject" name="subject" required className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+                  <option value="">Seleccioná un asunto</option>
                   <option value="adopcion">Consulta sobre adopción</option>
-                  <option value="transito">Quiero ser hogar de tránsito</option>
-                  <option value="donacion">Donaciones</option>
+                  <option value="transito">Quiero ser tránsito</option>
+                  <option value="donacion">Donación</option>
                   <option value="voluntariado">Voluntariado</option>
-                  <option value="rescate">Reportar un animal en peligro</option>
+                  <option value="animal_calle">Reporte de animal en la calle</option>
                   <option value="otro">Otro</option>
                 </select>
               </div>
-
               <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Mensaje *
-                </label>
-                <textarea
-                  name="message"
-                  required
-                  value={formData.message}
-                  onChange={handleChange}
-                  rows={5}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  placeholder="Cuéntanos en qué podemos ayudarte..."
-                />
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Mensaje *</label>
+                <textarea id="message" name="message" required rows={5} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 resize-none" />
               </div>
-
-              <button
-                type="submit"
-                className="w-full bg-amber-500 hover:bg-amber-600 text-white py-4 rounded-lg font-semibold text-lg transition-colors flex items-center justify-center gap-2"
-              >
-                <Send size={20} />
-                Enviar Mensaje
-              </button>
+              <Button type="submit" variant="primary" size="lg" className="w-full" disabled={status === 'submitting'}>
+                {status === 'submitting' ? (
+                  <><Loader2 size={18} className="animate-spin" /> Enviando...</>
+                ) : (
+                  'Enviar mensaje'
+                )}
+              </Button>
+              <p className="text-xs text-center text-gray-400">* Campos obligatorios.</p>
             </form>
-          </div>
-
-          {/* Contact Info */}
-          <div className="space-y-6">
-            {/* Contact Details */}
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">
-                Información de Contacto
-              </h3>
-
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="bg-amber-100 p-3 rounded-lg">
-                    <Phone className="text-amber-600" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800 mb-1">Teléfono</h4>
-                    <p className="text-gray-600">+54 9 11 1234-5678</p>
-                    <p className="text-gray-600">Lunes a Viernes 10-18hs</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="bg-amber-100 p-3 rounded-lg">
-                    <Mail className="text-amber-600" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800 mb-1">Email</h4>
-                    <p className="text-gray-600">info@huellitas.org</p>
-                    <p className="text-gray-600">adopciones@huellitas.org</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="bg-amber-100 p-3 rounded-lg">
-                    <MapPin className="text-amber-600" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800 mb-1">Dirección</h4>
-                    <p className="text-gray-600">Calle Ejemplo 1234</p>
-                    <p className="text-gray-600">Buenos Aires, Argentina</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Social Media */}
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">
-                Síguenos en Redes Sociales
-              </h3>
-              
-              <div className="space-y-4">
-                <a
-                  href="https://facebook.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center space-x-3 text-gray-700 hover:text-amber-600 transition-colors"
-                >
-                  <Facebook size={24} />
-                  <span className="font-medium">Facebook - @Huellitas</span>
-                </a>
-                
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center space-x-3 text-gray-700 hover:text-amber-600 transition-colors"
-                >
-                  <Instagram size={24} />
-                  <span className="font-medium">Instagram - @huellitas_refugio</span>
-                </a>
-              </div>
-
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <p className="text-gray-600 text-sm">
-                  ¡Síguenos para ver historias de adopción, conocer a nuestros rescatados
-                  y enterarte de nuestros eventos!
-                </p>
-              </div>
-            </div>
-
-            {/* Emergency */}
-            <div className="bg-red-50 border-l-4 border-red-500 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-red-800 mb-2">
-                🚨 Emergencias
-              </h3>
-              <p className="text-red-700 mb-2">
-                Si encontraste un animal en peligro inmediato:
-              </p>
-              <p className="text-red-800 font-semibold">
-                WhatsApp: +54 9 11 9999-9999
-              </p>
-              <p className="text-red-600 text-sm mt-2">
-                Disponible 24/7 solo para emergencias
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Map Placeholder */}
-        <div className="mt-12 bg-white rounded-lg shadow-md p-8">
-          <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-            Nuestra Ubicación
-          </h3>
-          <div className="bg-gray-200 h-96 rounded-lg flex items-center justify-center">
-            <div className="text-center text-gray-600">
-              <MapPin size={48} className="mx-auto mb-4" />
-              <p className="text-lg">Mapa interactivo</p>
-              <p className="text-sm">(Aquí iría Google Maps o similar)</p>
-            </div>
           </div>
         </div>
       </div>
